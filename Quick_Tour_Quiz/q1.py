@@ -35,7 +35,7 @@ y = np.array([b[0] + b[1]*t_array[i] for i in range(len(t_array))])
 
 a = (2*sc.pi)/365.25
 
-X_2 = np.array([[1, i, -np.sin(a*i)] for i in t_array])
+X_2 = np.array([[1, i, np.sin(a*i)] for i in t_array])
 X_2X_2T = np.dot(np.transpose(X_2), X_2)
 X_2Ty = np.dot(np.transpose(X_2), y)
 
@@ -51,4 +51,5 @@ plt.xlabel('Days Since 1981')
 plt.scatter(t_array, ppm_mauna)
 plt.plot(t_array, y)
 plt.plot(t_array, y_2)
+plt.savefig('Mauna_CO2.png')
 plt.show()
