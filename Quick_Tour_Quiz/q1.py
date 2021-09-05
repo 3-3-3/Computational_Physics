@@ -21,12 +21,11 @@ XXT = np.dot(np.transpose(X),X)
 XTy = np.dot(np.transpose(X), ppm_mauna)
 
 #b is the the inverse of XXT times XTy
-iXXT = (1/np.linalg.det(XXT))*np.array([[XXT[1][1], XXT[0][1]], [XXT[1][0], XXT[0][0]]])
-b = np.dot(iXXT, XTy)
+b = np.linalg.solve(XXT, XTy)
 print(b)
 
 #Create the best fit
-y = np.array([b[1]*t_array[i] for i in range(len(t_array))])
+y = np.array([b[0] + b[1]*t_array[i] for i in range(len(t_array))])
 
 plt.scatter(t_array, ppm_mauna)
 plt.plot(t_array, y)
