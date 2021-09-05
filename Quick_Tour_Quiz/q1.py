@@ -33,15 +33,15 @@ y = np.array([b[0] + b[1]*t_array[i] for i in range(len(t_array))])
 #Such that f_0(x) = 1, f_2(x) = 2, and f_3(x) = sin(ax)
 #With a = 2pi/365
 
-a = (2*sc.pi)/185
+a = (2*sc.pi)/365.25
 
-X_2 = np.array([[1, i, np.sin(a*i), np.cos(a*i)] for i in t_array])
+X_2 = np.array([[1, i, -np.sin(a*i)] for i in t_array])
 X_2X_2T = np.dot(np.transpose(X_2), X_2)
 X_2Ty = np.dot(np.transpose(X_2), y)
 
 b_2 = np.linalg.solve(X_2X_2T, X_2Ty)
 
-y_2 = np.array([b_2[0] + b_2[1]*i + b_2[2]*i for i in t_array])
+y_2 = np.array([b_2[0] + b_2[1]*i + -1e14*b_2[2]*np.sin(a*i) for i in t_array])
 print('b_2')
 print(b_2)
 
