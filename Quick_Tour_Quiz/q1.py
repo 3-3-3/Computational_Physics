@@ -40,7 +40,7 @@ y = np.array([5-2*i+4*np.sin(1.2*i)+0.1*random.randrange(1,10) for i in x])
 
 
 #x_b = np.linspace(0,4*sc.pi,100)
-a = 2*sc.pi/365.25
+a = 2*sc.pi/365
 b = ls_a_x_sinx(t_array,ppm_mauna,a)
 print(f'b (solution to AT.A.[b] = AT.y): {b}')
 y_b = np.array([b[0] + b[1]*i + b[2]*np.sin(a*i) for i in t_array])
