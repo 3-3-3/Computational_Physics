@@ -40,4 +40,5 @@ if __name__ == '__main__':
     plt.ylabel('$\\frac{F_{n+1}}{F_n}$')
     plt.xlabel('$n$')
     plt.legend()
+    plt.savefig('Golden_Ratio.png')
     plt.show()
