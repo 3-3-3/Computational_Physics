@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.constants as sc
+from scipy.optimize import curve_fit
 import random
 
 ppm_mauna = np.load("Mauna_CO2.npy")
@@ -45,12 +46,21 @@ b = ls_a_x_sinx(t_array,ppm_mauna,a)
 print(f'b (solution to AT.A.[b] = AT.y): {b}')
 y_b = np.array([b[0] + b[1]*i + b[2]*np.sin(a*i) for i in t_array])
 
-plt.title(f'CO2 Levels In Mauna Loa (Average increase of {np.round(b[1]*365, decimals=2)} ppm per year)')
-plt.ylabel('CO2 Levels (Parts Per Million)')
+def rising_sine_function(x, b_0, b_1, b_2, a, p):
+    y = b_0 + b_1*x + b_2*np.sin((2*sc.pi*a)*x + p)
+    return y
+
+opt, pcov = curve_fit(rising_sine_function, t_array, ppm_mauna)
+
+print(f'opt: {opt}')
+
+plt.title(f'$CO_2$ Levels In Mauna Loa (Average increase of {np.round(b[1]*365, decimals=2)} ppm per year)')
+plt.ylabel('$CO_2$ Levels (Parts Per Million)')
 plt.xlabel('Days Since 1981')
 #plt.scatter(x,y)
 text_kwargs = dict(ha='center', va='center', fontsize=28, color='C1')
 plt.plot(t_array, y_b)
+plt.plot(t_array, rising_sine_function(t_array, *opt))
 plt.scatter(t_array, ppm_mauna, c=['orange'], marker='.')
 #note that b[1] is the average increase per day. Multiply by 365 to obtain average increase per day.
 
