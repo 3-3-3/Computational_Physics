@@ -38,16 +38,21 @@ if __name__ == '__main__':
     R_3 = (golden_ratio(30, a_1=11,a_2=19),11,19)
     R_4 = (golden_ratio(30, a_1=513, a_2=2011),513,2011)
 
-    x = np.arange(10)
+    x = np.arange(len(R_1[0]))
 
+    fig, (ax1, ax2) = plt.subplots(2,1)
 
     for i in [R_1, R_2, R_3, R_4]:
-        plt.plot(x,i[0],label=f'$a_1 = {i[1]}$, $a_2 = {i[2]}$')
-        plt.scatter(x,i[0])
-    plt.plot(x,np.ones(10)*((1+np.sqrt(5))/2))
-    plt.title('Convergence to $\phi$ For $\\frac{F_{n+1}}{F_n}$')
-    plt.ylabel('$\\frac{F_{n+1}}{F_n}$')
-    plt.xlabel('$n$')
-    plt.legend()
+        ax1.plot(x,i[0],label=f'$a_1 = {i[1]}$, $a_2 = {i[2]}$')
+        ax1.scatter(x,i[0])
+
+        error = np.abs(np.array(i[0]) - sc.golden)
+        ax2.plot(x,error,label=f'$a_1 = {i[1]}$, $a_2 = {i[2]}$')
+        ax2.scatter(x,error)
+
+    ax1.set_title('Convergence to $\phi$ For $\\frac{F_{n+1}}{F_n}$')
+    ax1.set_ylabel('$\\frac{F_{n+1}}{F_n}$')
+    ax1.set_xlabel('$n$')
+    ax1.legend()
     plt.savefig('Golden_Ratio.png')
     plt.show()
