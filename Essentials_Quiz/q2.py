@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.constants as sc
 
 def fibonacci(n, seq=np.array([1,1])):
     if seq.size == n:
@@ -16,21 +17,29 @@ def golden_ratio(n, a_1=1, a_2=1):
     s = fibonacci(n, seq=np.array([a_1,a_2]))
     return np.array([s[i]/s[i-1] for i in range(1,s.size)])
 
-if __name__ == '__main__':
-    R_1 = (golden_ratio(11),1,1)
-    R_2 = (golden_ratio(11, a_1=1, a_2=3),1,3) #Lucas Numbers
-    R_3 = (golden_ratio(11, a_1=11,a_2=19),11,19)
-    R_4 = (golden_ratio(11, a_1=513, a_2=2011),513,2011)
+def converge_to_golden(tolerance, f_n1=1, f_n2=1, term=1):
+    """
+    Determine how many terms are necessary to converge to the golden ratio given a certain tolerance
+    Returns which term is the first to approximate the golden ratio to the  correct term
+    """
+    f_n = f_n1 + f_n2
+    golden_approx = f_n/f_n1
+    print(golden_approx - sc.golden)
 
-    #This gives the error at each n. The error of the 10th is of the order 10e-4,
-    #or four decimal points. This impossible to discern on the graph
-    #so it does not make sense to go further.
-    #Clearly R_n never reaches the golden ratio because R_n is by
-    #Definition rational, while the golden ratio is ironically irrational
-    #So determining what counts as "Convergence" depends on the use case
-    print(R_4-(1+np.sqrt(5))/2)
+    if np.abs(golden_approx - sc.golden) <= tolerance:
+        return term+1
+    else:
+        return converge_to_golden(tolerance, f_n1=f_n, f_n2=f_n1, term=term+1)
+
+
+if __name__ == '__main__':
+    R_1 = (golden_ratio(30),1,1)
+    R_2 = (golden_ratio(30, a_1=1, a_2=3),1,3) #Lucas Numbers
+    R_3 = (golden_ratio(30, a_1=11,a_2=19),11,19)
+    R_4 = (golden_ratio(30, a_1=513, a_2=2011),513,2011)
 
     x = np.arange(10)
+
 
     for i in [R_1, R_2, R_3, R_4]:
         plt.plot(x,i[0],label=f'$a_1 = {i[1]}$, $a_2 = {i[2]}$')
