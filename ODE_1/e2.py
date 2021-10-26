@@ -22,8 +22,9 @@ def euler_pendulum(th_0, l, tau, periods=5, om_0=0.0):
 
 
     while t < t_max:
-        th = th_old + om * tau
         om = om - sc.g / l * np.sin(th_old) * tau
+        th = th_old + om * tau
+
         print(f'Omega: {om}')
         me = 0.5 * (l * om)**2 + sc.g * l * (1 - np.cos(th_old)) #mechanical energy of system per unit mass
 
@@ -40,7 +41,7 @@ def euler_pendulum(th_0, l, tau, periods=5, om_0=0.0):
 
 if __name__ == '__main__':
     fig, (ax1, ax2) = plt.subplots(2,1)
-    th_array, om_array, me_array, t_array = euler_pendulum(np.pi/6, 10, tau=0.001)
+    th_array, om_array, me_array, t_array = euler_pendulum(3.124, 10, tau=0.1)
     ax1.plot(t_array, th_array)
     ax1.set_title('Angluar Position')
     ax2.plot(t_array, me_array)
