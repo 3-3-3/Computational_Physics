@@ -1,23 +1,32 @@
-LAMMPS (29 Sep 2021 - Update 2)
+
 # Initialization
+units		          lj
+dimension 	      2
+atom_style	      atomic
+pair_style	      lj/cut 2.5
+boundary	        p p p
 
-units		lj
-dimension 	2
-atom_style	atomic
-pair_style	lj/cut 2.5
-boundary	p p p
 # System definition
+region            b block -30 30 -30 30 -0.5 0.5
+create_box        2 b
+create_atoms      1 random 1500 341343 b
+create_atoms      2 random 100 127578 b
 
-region            myreg block -30 30 -30 30 -0.5 0.5
-create_box        2 myreg
-Created orthogonal box = (-30.000000 -30.000000 -0.50000000) to (30.000000 30.000000 0.50000000)
-  1 by 1 by 1 MPI processor grid
-create_atoms      1 random 1500 341341 myreg
-Created 1500 atoms
-  using lattice units in orthogonal box = (-30.000000 -30.000000 -0.50000000) to (30.000000 30.000000 0.50000000)
-  create_atoms CPU = 0.000 seconds
-create_atoms      2 random 100 127569 myreg
-Created 100 atoms
-  using lattice units in orthogonal box = (-30.000000 -30.000000 -0.50000000) to (30.000000 30.000000 0.50000000)
-  create_atoms CPU = 0.000 seconds
-Total wall time: 0:00:00
+#Sim settings
+mass              1 1
+mass              2 1
+pair_coeff        1 1 1.0 1.0
+pair_coeff        2 2 0.5 3.0
+neigh_modify      every 1 delay 5 check yes
+dump              mydmp all atom 1000 dump.lammpstrj
+
+#run
+thermo            10
+minimize          1.0e-4 1.0e-6 1000 1000
+
+fix		            mynve all nve
+fix		            mylgv all langevin 1.0 1.0 0.1 1530917
+fix		            myefn all enforce2d
+timestep	        0.005
+thermo		        1000
+run		            10000
